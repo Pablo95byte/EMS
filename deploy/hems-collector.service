@@ -1,0 +1,18 @@
+# systemd unit per il collector di telemetria (Fase 1)
+# Installazione: cp deploy/hems-collector.service /etc/systemd/system/
+#                systemctl enable --now hems-collector
+[Unit]
+Description=HEMS - collector telemetria Huawei SUN2000
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hems
+WorkingDirectory=/opt/hems
+ExecStart=/opt/hems/.venv/bin/hems collect
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

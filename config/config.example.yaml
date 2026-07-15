@@ -1,0 +1,57 @@
+# Configurazione HEMS - copiare in config/config.yaml e adattare all'impianto.
+
+inverter:
+  host: "192.168.1.100"     # IP statico della Smart Dongle WLAN-FE
+  port: 502
+  slave_id: 1
+  # La dongle Huawei accetta UNA SOLA connessione Modbus attiva.
+  # Se altri servizi (es. Home Assistant) usano la dongle, puntare qui a un Modbus proxy.
+  connect_timeout_s: 10
+  # Polling sotto i 10s puo' far crashare la dongle: il client lo impone come minimo assoluto.
+  min_poll_interval_s: 10
+
+telemetry:
+  poll_interval_s: 60       # Fase 1: campionamento telemetria (>= min_poll_interval_s)
+
+database:
+  path: "data/hems.sqlite3"
+
+plant:
+  latitude: 45.464
+  longitude: 9.190
+  tilt_deg: 30              # inclinazione moduli
+  azimuth_deg: 0            # 0 = sud (convenzione Open-Meteo: 0=S, -90=E, 90=W)
+  kwp: 6.0                  # potenza di picco impianto
+  performance_ratio: 0.85   # perdite di sistema stimate
+
+battery:
+  capacity_kwh: 10.0
+  max_charge_w: 5000
+  max_discharge_w: 5000
+  soc_floor_perc: 15.0      # protezione cicli LiFePO4: mai scaricare sotto questa soglia
+  soc_ceiling_perc: 100.0
+  roundtrip_efficiency: 0.90
+
+gme:
+  # Zona di mercato per il prezzo orario (PUN oppure zona: NORD, CNOR, CSUD, SUD, SICI, SARD)
+  zone: "PUN"
+  # Sorgente dei prezzi MGP. Il download automatico dal sito GME richiede accettazione
+  # delle condizioni d'uso: in alternativa depositare il file XML giornaliero
+  # (YYYYMMDDMGPPrezzi.xml) nella directory indicata da xml_dir.
+  xml_dir: "data/gme"
+  download_url_template: "https://www.mercatoelettrico.org/It/WebServerDataStore/MGP_Prezzi/{date}MGPPrezzi.xml"
+
+optimizer:
+  # Arbitraggio notturno: carica da rete se prezzo notturno < night_price_ratio * picco serale
+  night_hours: [2, 3, 4]          # 02:00-04:59
+  peak_hours: [19, 20, 21]        # 19:00-21:59
+  night_price_ratio: 0.40
+  # Se la produzione solare prevista per il giorno e' sotto questa soglia (kWh),
+  # il giorno e' considerato "scarso" e l'arbitraggio notturno viene abilitato.
+  low_solar_day_kwh: 8.0
+  forced_charge_w: 3000           # potenza di carica forzata notturna (registro 47247)
+  max_grid_power_w: 4000          # potenza massima prelevabile dalla rete (registro 47242)
+
+control:
+  loop_interval_s: 30             # frequenza del control loop (>= min_poll_interval_s)
+  dry_run: true                   # true = logga i comandi senza scriverli (Fase 4: partire cosi')

@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hems"
+version = "0.1.0"
+description = "HEMS Predittivo per inverter Huawei SUN2000 + batteria LUNA2000 (Edge-to-Cloud)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary" }
+dependencies = [
+    "pymodbus>=3.6,<4",
+    "requests>=2.31",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=4.1",
+]
+
+[project.scripts]
+hems = "hems.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["hems*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

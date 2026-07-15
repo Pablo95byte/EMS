@@ -1,0 +1,20 @@
+# systemd unit per il control loop write-mode (Fase 4)
+# ATTENZIONE: abilitare solo dopo aver validato i piani in dry-run.
+[Unit]
+Description=HEMS - control loop inverter Huawei SUN2000
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hems
+WorkingDirectory=/opt/hems
+ExecStart=/opt/hems/.venv/bin/hems control
+Restart=always
+RestartSec=60
+# Il processo esegue il fallback a Massimo Autoconsumo prima di uscire:
+# dare tempo sufficiente per la scrittura Modbus.
+TimeoutStopSec=45
+
+[Install]
+WantedBy=multi-user.target
