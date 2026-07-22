@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bilanciere stilizzato: barra orizzontale con dischi ai lati. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#D0BCFF"
+        android:pathData="M24,50h60v8h-60z" />
+    <path
+        android:fillColor="#D0BCFF"
+        android:pathData="M28,38h8v32h-8z" />
+    <path
+        android:fillColor="#D0BCFF"
+        android:pathData="M72,38h8v32h-8z" />
+    <path
+        android:fillColor="#EFB8C8"
+        android:pathData="M18,42h6v24h-6z" />
+    <path
+        android:fillColor="#EFB8C8"
+        android:pathData="M84,42h6v24h-6z" />
+</vector>
